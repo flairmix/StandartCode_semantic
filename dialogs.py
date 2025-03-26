@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QDialog, QFormLayout, QLineEdit, QPushButton, QComboBox
+from PySide6.QtWidgets import QDialog, QFormLayout, QLineEdit, QPushButton, QComboBox, QCompleter
+from PySide6.QtCore import Qt
 
 
 class ExpressionDialog(QDialog):
@@ -67,12 +68,15 @@ class PropertyDialog(QDialog):
 
 
 class ObjectDialog(QDialog):
-    def __init__(self, parent=None, obj=None):
+    def __init__(self, parent=None, obj=None, searcher=None):
         super().__init__(parent)
         self.setWindowTitle("Объект")
         layout = QFormLayout()
-
+        
+        self.searcher = searcher
         self.obj_name = QLineEdit()
+        self.obj_name.textChanged.connect(self.update_suggestions)
+
         self.obj_code = QLineEdit()
         self.obj_code.setReadOnly(True)
         self.obj_ksi = QLineEdit()
@@ -90,6 +94,16 @@ class ObjectDialog(QDialog):
         layout.addWidget(ok_button)
 
         self.setLayout(layout)
+    
+    def update_suggestions(self, text):
+        if not self.searcher or len(text) < 2:
+            return
+        results = self.searcher.search_nearest(text, top_k=10)
+        suggestions = [res["Наименование"] for res in results]
+
+        completer = QCompleter(suggestions)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.obj_name.setCompleter(completer)
 
 
 class RelationDialog(QDialog):

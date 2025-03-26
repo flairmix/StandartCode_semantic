@@ -14,7 +14,7 @@ class ObjectHandler:
         obj_set = current_item.data(0, 1)
         if not isinstance(obj_set, ObjectSet):
             return
-        dialog = ObjectDialog(self.window)
+        dialog = ObjectDialog(self.window, searcher=self.window.searcher)
         if dialog.exec():
             obj_name = dialog.obj_name.text()
             obj_code = dialog.obj_code.text()

@@ -3,13 +3,15 @@ from PySide6.QtWidgets import (
     QTextEdit, QTreeWidget, QTreeWidgetItem
 )
 from handlers import ExpressionHandler, ObjectTreeHandler
-
+from searcher.csv_embedding_searcher import CSVEmbeddingSearcher
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Desktop приложение")
         self.resize(500, 500)
+
+        self.searcher = CSVEmbeddingSearcher("searcher\\data\\06_Com.csv", "Наименование")
 
         self.expressions = []
         self.object_map = {}
