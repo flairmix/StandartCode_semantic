@@ -2,8 +2,6 @@ from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton,
     QTextEdit, QTreeWidget, QTreeWidgetItem
 )
-from models import Property, ObjectEntity, Expression, ObjectSet
-from dialogs import ExpressionDialog, ObjectDialog, PropertyDialog, SetDialog
 from handlers import ExpressionHandler, ObjectTreeHandler
 
 
@@ -70,6 +68,7 @@ class MainWindow(QWidget):
 
         self.add_relation_button = QPushButton("Добавить отношение")
         self.add_relation_button.setEnabled(False)
+        self.add_relation_button.clicked.connect(self.tree_handler.add_relation)
         btn_layout.addWidget(self.add_relation_button)
 
         self.main_layout.addLayout(btn_layout)

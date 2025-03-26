@@ -90,3 +90,42 @@ class ObjectDialog(QDialog):
         layout.addWidget(ok_button)
 
         self.setLayout(layout)
+
+
+class RelationDialog(QDialog):
+    def __init__(self, parent=None, object_names=None, current_subject=None, current_object=None, current_relation=None):
+        super().__init__(parent)
+        self.setWindowTitle("Добавить отношение")
+        layout = QFormLayout()
+
+        self.subject_combo = QComboBox()
+        self.subject_combo.addItems(object_names or [])
+        if current_subject:
+            self.subject_combo.setCurrentText(current_subject)
+
+        self.relation_combo = QComboBox()
+        self.relation_combo.addItems(["partOf", "distanceFrom", "insideOf", "aboveOf", "belowOf"])
+        if current_relation:
+            self.relation_combo.setCurrentText(current_relation)
+
+        self.object_combo = QComboBox()
+        self.object_combo.addItems(object_names or [])
+        if current_object:
+            self.object_combo.setCurrentText(current_object)
+
+        layout.addRow("Субъект:", self.subject_combo)
+        layout.addRow("Отношение:", self.relation_combo)
+        layout.addRow("Объект:", self.object_combo)
+
+        ok_button = QPushButton("ОК")
+        ok_button.clicked.connect(self.accept)
+        layout.addWidget(ok_button)
+
+        self.setLayout(layout)
+
+    def get_values(self):
+        return (
+            self.subject_combo.currentText(),
+            self.relation_combo.currentText(),
+            self.object_combo.currentText()
+        )
