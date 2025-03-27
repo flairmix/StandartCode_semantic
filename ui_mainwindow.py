@@ -11,7 +11,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Desktop приложение")
         self.resize(500, 500)
 
-        self.searcher = CSVEmbeddingSearcher("searcher\\data\\06_Com.csv", "Наименование")
+        self.searcher = CSVEmbeddingSearcher("searcher\\data\\06_Com_subclass2.csv", "Наименование")
 
         self.expressions = []
         self.object_map = {}
