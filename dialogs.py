@@ -71,13 +71,17 @@ class ObjectDialog(QDialog):
     def __init__(self, parent=None, obj=None, searcher=None):
         super().__init__(parent)
         self.setWindowTitle("Объект")
+        self.resize(400, self.height())
+
         layout = QFormLayout()
         
         self.searcher = searcher
         self.obj_name = QLineEdit()
         self.obj_name.textChanged.connect(self.update_suggestions)
+        self.obj_name.textChanged.connect(self.update_ksi)
 
         self.obj_code = QLineEdit()
+        self.obj_code.width = 200
         self.obj_code.setReadOnly(True)
         self.obj_ksi = QLineEdit()
         layout.addRow("Name:", self.obj_name)
@@ -103,7 +107,14 @@ class ObjectDialog(QDialog):
 
         completer = QCompleter(suggestions)
         completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        completer.setFilterMode(Qt.MatchContains)
         self.obj_name.setCompleter(completer)
+
+    def update_ksi(self, text):
+        if not self.searcher or len(text) < 2:
+            return
+        self.obj_ksi.setText(self.searcher.df[self.searcher.df["Наименование"] == text]["Подкласс 2"].values[0])
 
 
 class RelationDialog(QDialog):
@@ -118,7 +129,7 @@ class RelationDialog(QDialog):
             self.subject_combo.setCurrentText(current_subject)
 
         self.relation_combo = QComboBox()
-        self.relation_combo.addItems(["partOf", "distanceFrom", "insideOf", "aboveOf", "belowOf"])
+        self.relation_combo.addItems(["partOf", "serves", "distanceFrom", "insideOf", "aboveOf", "belowOf"])
         if current_relation:
             self.relation_combo.setCurrentText(current_relation)
 
